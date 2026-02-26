@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>English for Nana</title>
+<style>
+:root{--blue:#268bd2;--bg:#fdf6e3;--text:#073642;--green:#859900;--red:#d33682;--orange:#cb4b16}
+body{font-family:sans-serif;background:var(--bg);color:var(--text);margin:0;padding:10px;display:flex;flex-direction:column;align-items:center}
+.score{display:flex;gap:20px;margin-bottom:10px;font-weight:bold;font-size:18px}
+.modes{margin-bottom:15px;display:flex;gap:10px}
+.m-btn{padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;border:3px solid var(--orange);background:white;color:var(--orange)}
+.m-btn.active{background:var(--orange);color:white}
+.menu{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin-bottom:10px;max-width:500px}
+.t-btn{background:#eee8d5;border:2px solid var(--blue);padding:8px 12px;border-radius:12px;font-size:14px;font-weight:bold;cursor:pointer}
+.t-btn.active{background:var(--blue);color:white}
+.card{background:white;padding:25px;border-radius:25px;box-shadow:0 10px 30px rgba(0,0,0,0.1);width:100%;max-width:450px;border:5px solid var(--blue);box-sizing:border-box}
+h1{font-size:32px;margin:10px 0;color:var(--blue)}
+.tr{font-size:28px;color:#b58900;font-weight:bold;margin-bottom:10px;background:#eee8d5;padding:8px;border-radius:10px}
+.ru{font-size:26px;color:#586e75;margin-bottom:20px;font-weight:bold}
+button{cursor:pointer;border:none;border-radius:18px;font-weight:bold;width:100%;margin:5px 0;padding:22px;font-size:26px;-webkit-tap-highlight-color:transparent}
+.btn-audio{background:var(--green);color:white}
+.btn-check{background:var(--orange);color:white}
+.nav{display:flex;justify-content:space-between;margin-top:15px}
+.btn-nav{background:var(--blue);color:white;padding:12px;font-size:20px;width:48%}
+.res{display:flex;gap:10px;margin-top:10px}
+.btn-ok{background:var(--green);color:white;font-size:20px}
+.btn-fail{background:var(--red);color:white;font-size:20px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="modes">
+<div id="ml" class="m-btn active" onclick="sm('learn')">УЧИТЬ</div>
+<div id="mt" class="m-btn" onclick="sm('test')">ПРОВЕРКА</div>
+</div>
+<div id="sa" class="score hide">
+<span style="color:var(--green)">✅: <span id="sok">0</span></span>
+<span style="color:var(--red)">❌: <span id="sf">0</span></span>
+</div>
+<div class="menu" id="mm"></div>
+<div class="card">
+<div id="cs" style="color:#93a1a1;font-weight:bold;text-transform:uppercase;margin-bottom:8px"></div>
+<div id="rt" class="ru"></div>
+<div id="aa">
+<h1 id="et"></h1>
+<div id="tt" class="tr"></div>
+<button class="btn-audio" onclick="play()">🔊 СЛУШАТЬ</button>
+</div>
+<button id="cb" class="btn-check hide" onclick="rev()">👁️ УЗНАТЬ ОТВЕТ</button>
+<div id="fb" class="res hide">
+<button class="btn-ok" onclick="hr(1)">✅ ПОМНЮ</button>
+<button class="btn-fail" onclick="hr(0)">❌ ЗАБЫЛА</button>
+</div>
+<div id="nb" class="nav">
+<button class="btn-nav" onclick="prv()">← Назад</button>
+<button class="btn-nav" onclick="nxt()">Вперед →</button>
+</div>
+</div>
+<script>
+const d=[
+{e:"Good morning!",r:"Доброе утро!",t:"Гуд морнинг!",c:"👋 Привет"},
+{e:"How are you?",r:"Как дела?",t:"Хау ар ю?",c:"👋 Привет"},
+{e:"How do you feel?",r:"Как ты себя?",t:"Хау ду ю фил?",c:"⚕️ Здоровье"},
+{e:"I need medicine",r:"Нужно лекарство",t:"Ай нид мэдисин",c:"⚕️ Здоровье"},
+{e:"Tea, please",r:"Чай, пожалуйста",t:"Ти, плиз",c:"🍎 Еда"},
+{e:"Apple",r:"Яблоко",t:"Эпл",c:"🍎 Еда"},
+{e:"Sleep well",r:"Спи крепко",t:"Слип уэл",c:"🌙 Сон"},
+{e:"One",r:"1",t:"Уан",c:"🔢 Числа"},{e:"Two",r:"2",t:"Ту",c:"🔢 Числа"},
+{e:"Three",r:"3",t:"Фри",c:"🔢 Числа"},{e:"Four",r:"4",t:"Фор",c:"🔢 Числа"},
+{e:"Five",r:"5",t:"Файв",c:"🔢 Числа"},{e:"Six",r:"6",t:"Сикс",c:"🔢 Числа"},
+{e:"Seven",r:"7",t:"Сэвэн",c:"🔢 Числа"},{e:"Eight",r:"8",t:"Эйт",c:"🔢 Числа"},
+{e:"Nine",r:"9",t:"Найн",c:"🔢 Числа"},{e:"Ten",r:"10",t:"Тэн",c:"🔢 Числа"},
+{e:"Eleven",r:"11",t:"Илэвэн",c:"🔢 Числа"},{e:"Twelve",r:"12",t:"Туэлв",c:"🔢 Числа"},
+{e:"Thirteen",r:"13",t:"Фётиин",c:"🔢 Числа"},{e:"Fourteen",r:"14",t:"Фортиин",c:"🔢 Числа"},
+{e:"Fifteen",r:"15",t:"Фифтиин",c:"🔢 Числа"},{e:"Sixteen",r:"16",t:"Сикстиин",c:"🔢 Числа"},
+{e:"Seventeen",r:"17",t:"Сэвэнтиин",c:"🔢 Числа"},{e:"Eighteen",r:"18",t:"Эйтиин",c:"🔢 Числа"},
+{e:"Nineteen",r:"19",t:"Найнтиин",c:"🔢 Числа"},{e:"Twenty",r:"20",t:"Туэнти",c:"🔢 Числа"}
+];
+let l=[...d],i=0,m='learn',ok=0,fa=0;
+function sm(v){m=v;document.getElementById('ml').classList.toggle('active',v==='learn');document.getElementById('mt').classList.toggle('active',v==='test');document.getElementById('sa').classList.toggle('hide',v==='learn');ok=0;fa=0;us();i=0;up();}
+function rev(){document.getElementById('aa').classList.remove('hide');document.getElementById('cb').classList.add('hide');document.getElementById('fb').classList.remove('hide');play();}
+function hr(v){if(v)ok++;else fa++;us();nxt();}
+function us(){document.getElementById('sok').innerText=ok;document.getElementById('sf').innerText=fa;}
+function init(){
+const cats=["Все",...new Set(d.map(x=>x.c))];
+const container=document.getElementById('mm');
+cats.forEach(c=>{
+const b=document.createElement('div');b.className='t-btn'+(c==="Все"?" active":"");b.innerText=c;
+b.onclick=()=>{document.querySelectorAll('.t-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');l=c==="Все"?[...d]:d.filter(x=>x.c===c);i=0;up();};
+container.appendChild(b);
+});
+up();
+}
+function up(){
+const item=l[i];document.getElementById('cs').innerText=item.c;document.getElementById('et').innerText=item.e;document.getElementById('tt').innerText="["+item.t+"]";document.getElementById('rt').innerText=item.r;
+if(m==='test'){document.getElementById('aa').classList.add('hide');document.getElementById('cb').classList.remove('hide');document.getElementById('nb').classList.add('hide');document.getElementById('fb').classList.add('hide');}
+else{document.getElementById('aa').classList.remove('hide');document.getElementById('cb').classList.add('hide');document.getElementById('nb').classList.remove('hide');document.getElementById('fb').classList.add('hide');}
+}
+function play(){const u=new SpeechSynthesisUtterance(l[i].e);u.lang='en-US';u.rate=0.7;speechSynthesis.speak(u);}
+function nxt(){i=(i+1)%l.length;up()}
+function prv(){i=(i-1+l.length)%l.length;up()}
+init();
+</script>
+</body>
+</html>
