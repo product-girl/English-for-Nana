@@ -19,7 +19,7 @@ body { font-family: sans-serif; background: var(--bg); color: var(--text); margi
 .ru { font-size: 38px; color: #586e75; margin-bottom: 30px; font-weight: bold; line-height: 1.2; }
 h1 { font-size: 52px; margin: 15px 0; color: var(--blue); line-height: 1.1; }
 .tr { font-size: 36px; color: #b58900; font-weight: bold; margin-bottom: 20px; background: #eee8d5; padding: 15px; border-radius: 15px; display: inline-block; }
-button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; width: 100%; margin: 10px 0; padding: 30px; font-size: 34px; }
+button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; width: 100%; margin: 10px 0; padding: 30px; font-size: 34px; -webkit-tap-highlight-color: transparent; }
 .btn-audio { background: var(--green); color: white; }
 .btn-check { background: var(--orange); color: white; }
 .nav { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
@@ -63,9 +63,19 @@ button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; 
     </div>
 </div>
 
-<script src="data.js?v=1.1"></script>
-
 <script>
+// ЛОГИКА ЗАГРУЗКИ ДАННЫХ (АНТИ-КЕШ)
+var script = document.createElement('script');
+script.src = 'data.js?v=' + Date.now(); // Добавляем время, чтобы файл всегда был "новым"
+script.onload = function() {
+    if (typeof d !== 'undefined') {
+        init();
+    } else {
+        alert("Ошибка: Не удалось загрузить список фраз из data.js");
+    }
+};
+document.head.appendChild(script);
+
 var l = [];
 var i = 0;
 var m = "learn";
@@ -108,15 +118,12 @@ function us() {
 }
 
 function init() {
-    if (typeof d === 'undefined') {
-        alert("Ошибка: файл data.js не найден или пуст!");
-        return;
-    }
     var categories = ["Все"];
     for (var j = 0; j < d.length; j++) {
         if (categories.indexOf(d[j].c) === -1) { categories.push(d[j].c); }
     }
     var container = document.getElementById("mm");
+    container.innerHTML = ""; // Очистка меню перед созданием
     categories.forEach(function(cat) {
         var btn = document.createElement("div");
         btn.className = "t-btn";
@@ -161,14 +168,12 @@ function up() {
 function playAudio() {
     var u = new SpeechSynthesisUtterance(l[i].e);
     u.lang = "en-US"; u.rate = 0.7;
+    window.speechSynthesis.cancel(); // Остановить текущую речь перед новой
     window.speechSynthesis.speak(u);
 }
 
 function nxt() { i = (i + 1) % l.length; up(); }
 function prv() { i = (i - 1 + l.length) % l.length; up(); }
-
-// Start the app after a tiny delay to ensure data.js is loaded
-window.onload = init;
 </script>
 </body>
 </html>
