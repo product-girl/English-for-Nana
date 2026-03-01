@@ -63,26 +63,9 @@ button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; 
     </div>
 </div>
 
-<script>
-var d = [
-    {e:"Good morning!", r:"Доброе утро!", t:"Гуд морнинг!", c:"Привет"},
-    {e:"How are you?", r:"Как дела?", t:"Хау ар ю?", c:"Привет"},
-    {e:"Apple", r:"Яблоко", t:"Эпл", c:"Еда"},
-    {e:"Water", r:"Вода", t:"Уотэр", c:"Еда"},
-    {e:"I feel good", r:"Мне хорошо", t:"Ай фил гуд", c:"Здоровье"},
-    {e:"Sleep well", r:"Спи крепко", t:"Слип уэл", c:"Сон"},
-    {e:"One", r:"1", t:"Уан", c:"Числа"},
-    {e:"Two", r:"2", t:"Ту", c:"Числа"},
-    {e:"Three", r:"3", t:"Фри", c:"Числа"},
-    {e:"Four", r:"4", t:"Фор", c:"Числа"},
-    {e:"Five", r:"5", t:"Файв", c:"Числа"},
-    {e:"Six", r:"6", t:"Сикс", c:"Числа"},
-    {e:"Seven", r:"7", t:"Сэвэн", c:"Числа"},
-    {e:"Eight", r:"8", t:"Эйт", c:"Числа"},
-    {e:"Nine", r:"9", t:"Найн", c:"Числа"},
-    {e:"Ten", r:"10", t:"Тэн", c:"Числа"}
-];
+<script src="data.js"></script>
 
+<script>
 var l = [];
 var i = 0;
 var m = "learn";
@@ -125,6 +108,10 @@ function us() {
 }
 
 function init() {
+    if (typeof d === 'undefined') {
+        alert("Ошибка: файл data.js не найден или пуст!");
+        return;
+    }
     var categories = ["Все"];
     for (var j = 0; j < d.length; j++) {
         if (categories.indexOf(d[j].c) === -1) { categories.push(d[j].c); }
@@ -152,6 +139,7 @@ function init() {
 }
 
 function up() {
+    if (l.length === 0) return;
     var item = l[i];
     document.getElementById("cs").innerText = item.c;
     document.getElementById("et").innerText = item.e;
@@ -179,7 +167,8 @@ function playAudio() {
 function nxt() { i = (i + 1) % l.length; up(); }
 function prv() { i = (i - 1 + l.length) % l.length; up(); }
 
-init();
+// Start the app after a tiny delay to ensure data.js is loaded
+window.onload = init;
 </script>
 </body>
 </html>
