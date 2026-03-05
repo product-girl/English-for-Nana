@@ -1,34 +1,131 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English for Nana</title>
-<style>
-:root { --blue: #268bd2; --bg: #fdf6e3; --text: #073642; --green: #859900; --red: #d33682; --orange: #cb4b16; }
-body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-.score { display: flex; gap: 30px; margin-bottom: 15px; font-weight: bold; font-size: 24px; }
-.modes { margin-bottom: 20px; display: flex; gap: 15px; }
-.m-btn { padding: 15px 30px; border-radius: 25px; font-size: 22px; font-weight: bold; cursor: pointer; border: 4px solid var(--orange); background: white; color: var(--orange); }
-.m-btn.active { background: var(--orange); color: white; }
-.menu { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 20px; max-width: 600px; }
-.t-btn { background: #eee8d5; border: 3px solid var(--blue); padding: 12px 20px; border-radius: 15px; font-size: 22px; font-weight: bold; cursor: pointer; }
-.t-btn.active { background: var(--blue); color: white; }
-.card { background: white; padding: 40px; border-radius: 35px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 100%; max-width: 550px; border: 8px solid var(--blue); box-sizing: border-box; text-align: center; }
-#cs { color: #93a1a1; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; font-size: 20px; }
-.ru { font-size: 38px; color: #586e75; margin-bottom: 30px; font-weight: bold; line-height: 1.2; }
-h1 { font-size: 52px; margin: 15px 0; color: var(--blue); line-height: 1.1; }
-.tr { font-size: 36px; color: #b58900; font-weight: bold; margin-bottom: 20px; background: #eee8d5; padding: 15px; border-radius: 15px; display: inline-block; }
-button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; width: 100%; margin: 10px 0; padding: 30px; font-size: 34px; -webkit-tap-highlight-color: transparent; }
-.btn-audio { background: var(--green); color: white; }
-.btn-check { background: var(--orange); color: white; }
-.nav { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
-.btn-nav { background: var(--blue); color: white; padding: 20px; font-size: 26px; width: 48%; }
-.res { display: flex; gap: 15px; margin-top: 15px; }
-.btn-ok { background: var(--green); color: white; }
-.btn-fail { background: var(--red); color: white; }
-.hide { display: none; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>English for Nana</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="English Nana">
+    <link rel="apple-touch-icon" href="https://cdn2.thecatapi.com/images/0XYvSTLsc.jpg">
+
+    <style>
+        :root { --blue: #268bd2; --bg: #fdf6e3; --text: #073642; --green: #859900; --red: #d33682; --orange: #cb4b16; }
+
+        /* Фиксируем экран, чтобы избежать скролла всей страницы */
+        html, body { 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden; 
+            background: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Кнопки переключения режимов */
+        .modes { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 10px; 
+            flex-shrink: 0; 
+        }
+        .m-btn { 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border: 3px solid var(--orange); 
+            background: white; 
+            color: var(--orange); 
+        }
+        .m-btn.active { background: var(--orange); color: white; }
+
+        /* Меню категорий: подстраивается под ширину устройства */
+        .menu { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 6px; 
+            margin-bottom: 10px; 
+            max-width: 800px; 
+            flex-shrink: 0;
+        }
+        .t-btn { 
+            background: #eee8d5; 
+            border: 2px solid var(--blue); 
+            padding: 6px 12px; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+        .t-btn.active { background: var(--blue); color: white; }
+
+        /* Адаптивная карточка */
+        .card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 500px; 
+            border: 6px solid var(--blue); 
+            box-sizing: border-box; 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            flex-grow: 1; 
+            min-height: 0; 
+            margin-bottom: 10px;
+        }
+
+        /* Прокрутка только внутри карточки, если текст не влезает */
+        .content-area {
+            overflow-y: auto; 
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #cs { color: #93a1a1; font-weight: bold; text-transform: uppercase; font-size: 14px; margin-bottom: 5px; }
+        .ru { font-size: 30px; color: #586e75; font-weight: bold; line-height: 1.1; margin-bottom: 10px; }
+        h1 { font-size: 40px; margin: 10px 0; color: var(--blue); line-height: 1.0; }
+        .tr { font-size: 24px; color: #b58900; font-weight: bold; margin-bottom: 10px; background: #eee8d5; padding: 8px; border-radius: 10px; display: inline-block; }
+
+        button { cursor: pointer; border: none; border-radius: 20px; font-weight: bold; width: 100%; padding: 15px; font-size: 24px; -webkit-tap-highlight-color: transparent; }
+        .btn-audio { background: var(--green); color: white; margin-top: 10px; }
+        .btn-check { background: var(--orange); color: white; }
+
+        .nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 15px; flex-shrink: 0; }
+        .btn-nav { background: var(--blue); color: white; font-size: 20px; width: 48%; }
+
+        .score { font-weight: bold; font-size: 18px; margin-bottom: 5px; flex-shrink: 0; }
+        .res { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-ok { background: var(--green); color: white; }
+        .btn-fail { background: var(--red); color: white; }
+        .hide { display: none; }
+
+        /* Увеличение шрифтов для больших экранов (iPad/Laptop) */
+        @media (min-height: 700px) {
+            .card { padding: 30px; }
+            .ru { font-size: 38px; }
+            h1 { font-size: 52px; }
+            .m-btn { font-size: 20px; padding: 12px 24px; }
+            .t-btn { font-size: 18px; padding: 10px 15px; }
+        }
+    </style>
 </head>
 <body>
 
@@ -45,18 +142,21 @@ button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; 
 <div class="menu" id="mm"></div>
 
 <div class="card">
-    <div id="cs"></div>
-    <div id="rt" class="ru"></div>
-    <div id="aa">
-        <h1 id="et"></h1>
-        <div id="tt" class="tr"></div>
-        <button class="btn-audio" onclick="playAudio()">ПОСЛУШАТЬ</button>
+    <div class="content-area">
+        <div id="cs"></div>
+        <div id="rt" class="ru"></div>
+        <div id="aa">
+            <h1 id="et"></h1>
+            <div id="tt" class="tr"></div>
+            <button class="btn-audio" onclick="playAudio()">ПОСЛУШАТЬ</button>
+        </div>
+        <button id="cb" class="btn-check hide" onclick="rev()">УЗНАТЬ ОТВЕТ</button>
+        <div id="fb" class="res hide">
+            <button class="btn-ok" onclick="hr(1)">ПОМНЮ</button>
+            <button class="btn-fail" onclick="hr(0)">ЗАБЫЛА</button>
+        </div>
     </div>
-    <button id="cb" class="btn-check hide" onclick="rev()">УЗНАТЬ ОТВЕТ</button>
-    <div id="fb" class="res hide">
-        <button class="btn-ok" onclick="hr(1)">ПОМНЮ</button>
-        <button class="btn-fail" onclick="hr(0)">ЗАБЫЛА</button>
-    </div>
+    
     <div id="nb" class="nav">
         <button class="btn-nav" onclick="prv()">Назад</button>
         <button class="btn-nav" onclick="nxt()">Вперед</button>
@@ -64,32 +164,20 @@ button { cursor: pointer; border: none; border-radius: 25px; font-weight: bold; 
 </div>
 
 <script>
-// ЛОГИКА ЗАГРУЗКИ ДАННЫХ (АНТИ-КЕШ)
+// Авто-загрузка данных с принудительным обновлением кэша
 var script = document.createElement('script');
-script.src = 'data.js?v=' + Date.now(); // Добавляем время, чтобы файл всегда был "новым"
-script.onload = function() {
-    if (typeof d !== 'undefined') {
-        init();
-    } else {
-        alert("Ошибка: Не удалось загрузить список фраз из data.js");
-    }
-};
+script.src = 'data.js?v=' + Date.now();
+script.onload = function() { if (typeof d !== 'undefined') init(); };
 document.head.appendChild(script);
 
-var l = [];
-var i = 0;
-var m = "learn";
-var ok = 0;
-var fa = 0;
+var l = [], i = 0, m = "learn", ok = 0, fa = 0;
 
-function shuffle(array) {
-    var currentIndex = array.length, randomIndex;
-    while (currentIndex != 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
     }
-    return array;
+    return a;
 }
 
 function sm(v) {
@@ -107,68 +195,47 @@ function rev() {
     playAudio();
 }
 
-function hr(v) {
-    if (v) { ok++; } else { fa++; }
-    us(); nxt();
-}
-
-function us() {
-    document.getElementById("sok").innerText = ok;
-    document.getElementById("sf").innerText = fa;
-}
+function hr(v) { if (v) ok++; else fa++; us(); nxt(); }
+function us() { document.getElementById("sok").innerText = ok; document.getElementById("sf").innerText = fa; }
 
 function init() {
-    var categories = ["Все"];
-    for (var j = 0; j < d.length; j++) {
-        if (categories.indexOf(d[j].c) === -1) { categories.push(d[j].c); }
-    }
-    var container = document.getElementById("mm");
-    container.innerHTML = ""; // Очистка меню перед созданием
-    categories.forEach(function(cat) {
-        var btn = document.createElement("div");
-        btn.className = "t-btn";
-        if (cat === "Все") { btn.className += " active"; }
-        btn.innerText = cat;
-        btn.onclick = function() {
-            var btns = document.querySelectorAll(".t-btn");
-            for (var k = 0; k < btns.length; k++) { btns[k].classList.remove("active"); }
-            btn.classList.add("active");
-            var filtered = [];
-            if (cat === "Все") { filtered = d.slice(); } 
-            else { for (var n = 0; n < d.length; n++) { if (d[n].c === cat) { filtered.push(d[n]); } } }
-            l = shuffle(filtered);
+    let cats = ["Все", ...new Set(d.map(x => x.c))];
+    let container = document.getElementById("mm");
+    container.innerHTML = "";
+    cats.forEach(c => {
+        let b = document.createElement("div");
+        b.className = "t-btn" + (c === "Все" ? " active" : "");
+        b.innerText = c;
+        b.onclick = () => {
+            document.querySelectorAll(".t-btn").forEach(x => x.classList.remove("active"));
+            b.classList.add("active");
+            l = shuffle(c === "Все" ? [...d] : d.filter(x => x.c === c));
             i = 0; up();
         };
-        container.appendChild(btn);
+        container.appendChild(b);
     });
-    l = shuffle(d.slice());
+    l = shuffle([...d]);
     up();
 }
 
 function up() {
-    if (l.length === 0) return;
-    var item = l[i];
-    document.getElementById("cs").innerText = item.c;
-    document.getElementById("et").innerText = item.e;
-    document.getElementById("tt").innerText = "[" + item.t + "]";
-    document.getElementById("rt").innerText = item.r;
-    if (m === "test") {
-        document.getElementById("aa").classList.add("hide");
-        document.getElementById("cb").classList.remove("hide");
-        document.getElementById("nb").classList.add("hide");
-        document.getElementById("fb").classList.add("hide");
-    } else {
-        document.getElementById("aa").classList.remove("hide");
-        document.getElementById("cb").classList.add("hide");
-        document.getElementById("nb").classList.remove("hide");
-        document.getElementById("fb").classList.add("hide");
-    }
+    if (!l[i]) return;
+    document.getElementById("cs").innerText = l[i].c;
+    document.getElementById("et").innerText = l[i].e;
+    document.getElementById("tt").innerText = "[" + l[i].t + "]";
+    document.getElementById("rt").innerText = l[i].r;
+    
+    let isT = (m === "test");
+    document.getElementById("aa").classList.toggle("hide", isT);
+    document.getElementById("cb").classList.toggle("hide", !isT);
+    document.getElementById("nb").classList.toggle("hide", isT);
+    document.getElementById("fb").classList.add("hide");
 }
 
 function playAudio() {
-    var u = new SpeechSynthesisUtterance(l[i].e);
-    u.lang = "en-US"; u.rate = 0.7;
-    window.speechSynthesis.cancel(); // Остановить текущую речь перед новой
+    window.speechSynthesis.cancel();
+    let u = new SpeechSynthesisUtterance(l[i].e);
+    u.lang = "en-US"; u.rate = 0.8;
     window.speechSynthesis.speak(u);
 }
 
